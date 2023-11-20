@@ -22,40 +22,51 @@ function getNumberForUser() {
   if (isFiniteOrNull(variable)) {
     return parseFloat(variable.replace(",", ".").trim());
   } else {
+    alert("Введи число!");
     getNumberForUser();
   }
 }
 
-function guessNumber(randomInt) {
+function guessNumber(randomInt, mumberOfAttempt) {
+  mumberOfAttempt--;
   let numberForUser = getNumberForUser();
   if (number === 0) {
     randomInt = getRandomInt(min, max);
     number += 1;
   }
-  console.log(`Пользователь: ${numberForUser} Компьютер: ${randomInt}`);
-  checkingNumber(numberForUser, randomInt);
+  if (mumberOfAttempt === 0) {
+    if (confirm("Попытки закончились, хотите сыграть еще?")) {
+      start();
+    }
+  } else {
+    console.log(`Пользователь: ${numberForUser} Компьютер: ${randomInt} Попытки: ${mumberOfAttempt}`);
+    checkingNumber(numberForUser, randomInt, mumberOfAttempt);
+  }
 }
 
-function checkingNumber(user, computer) {
+function checkingNumber(user, computer, mumberOfAttempt) {
   if (user === computer) {
-    alert(`"Поздравляю, Вы угадали!!!".`);
-  } else if (user > computer) {
-    alert(`"Загаданное число меньше"`);
-    guessNumber(computer);
+    if (confirm("Поздравляю, Вы угадали!!! Хотели бы сыграть еще?")) {
+      start();
+    }
   } else {
-    alert(`"Загаданное число больше"`);
-    guessNumber(computer);
+    if (user > computer) {
+      alert(`"Загаданное число меньше, осталось попыток ${mumberOfAttempt}"`);
+    } else {
+      alert(`"Загаданное число больше, осталось попыток ${mumberOfAttempt}"`);
+    }
+    guessNumber(computer, mumberOfAttempt);
   }
 }
 
 // — спрашивает пользователя: "Угадай число от 1 до 100".
 // — если пользователь нажимает "Отмена", то игра заканчивается и выводится сообщение "Игра окончена".
 function start() {
-  if (confirm(`"Угадай число от 1 до 100"`)) {
+  if (confirm("Угадай число от 1 до 100")) {
     const randomInt = getRandomInt(min, max);
-    guessNumber(randomInt);
+    guessNumber(randomInt, 10);
   } else {
-    alert(`"Игра окончена".`);
+    alert("Игра окончена...");
   }
 }
 
